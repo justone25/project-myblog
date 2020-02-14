@@ -1,10 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="_fragments :: head(~{::title})">
     <meta charset="UTF-8">
     <title>500</title>
 </head>
 <body>
-    <h1>500</h1>
+<nav th:replace="_fragments :: menu(0)"></nav>
+<br>
+<br>
+<br>
+<br>
+<div class="m-container-small m-padded-tb-massive">
+    <div class="ui error message m-padded-tb-huge">
+        <h2>500</h2>
+        <p>服务器出现异常，请联系博主说明问题，感谢您的反馈！</p>
+    </div>
+</div>
+<footer th:replace="_fragments :: footer"></footer>
 </body>
 </html>
