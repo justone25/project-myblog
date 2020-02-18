@@ -4,6 +4,7 @@ import com.xlydbb.myblog.exception.NotFoundException;
 import com.xlydbb.myblog.pojo.Blog;
 import com.xlydbb.myblog.pojo.BlogType;
 import com.xlydbb.myblog.repository.BlogRepository;
+import com.xlydbb.myblog.util.MyBeanUtils;
 import com.xlydbb.myblog.vo.BlogQuery;
 import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.BeanUtils;
@@ -17,7 +18,9 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -50,22 +53,26 @@ public class BlogServiceImpl implements BlogService {
             }
         },pageable);
     }
-
+    @Transactional
     @Override
     public Blog saveBlog(Blog blog) {
+        blog.setCreateTime(new Date());
+        blog.setUpdateTime(new Date());
+        blog.setViews(0);
         return blogRepository.save(blog);
     }
-
+    @Transactional
     @Override
     public Blog updateBlog(Long id, Blog blog) {
         Blog blogDB = blogRepository.getOne(id);
         if(blogDB == null){
             throw new NotFoundException("该博客不存在");
         }
-        BeanUtils.copyProperties(blog,blogDB);
+        MyBeanUtils.copyPropertiesIgnoreNull(blog,blogDB);
+        blogDB.setUpdateTime(new Date());
         return blogRepository.save(blogDB);
     }
-
+    @Transactional
     @Override
     public Blog deleteBlog(Long id) {
         Blog blogDB = blogRepository.getOne(id);

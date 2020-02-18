@@ -8,8 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class TagServiceImpl implements TagService {
@@ -37,6 +40,16 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    public List<BlogTag> listTag() {
+        return tagRepository.findAll();
+    }
+
+    @Override
+    public List<BlogTag> listTag(String ids) {
+        return tagRepository.findAllById(converToList(ids));
+    }
+
+    @Override
     public BlogTag updateTag(Long id, BlogTag blogTag) {
         BlogTag tag = tagRepository.getOne(id);
         if(tag == null){
@@ -54,5 +67,25 @@ public class TagServiceImpl implements TagService {
         }
         tagRepository.delete(tag);
         return tag;
+    }
+    private  List<Long> converToList(String ids){
+        List<Long> list = new ArrayList<>();
+        if(!StringUtils.isEmpty(ids)){
+            String [] idArray = ids.split(",");
+            for(int i =0;i<idArray.length;i++){
+                Long tagId;
+                try {
+                    tagId = Long.valueOf(idArray[i]);
+                } catch (NumberFormatException e) {
+                   //说明是在页面上新增的标签
+                    BlogTag blogTag = new BlogTag();
+                    blogTag.setName(idArray[i]);
+                    BlogTag blogTagDB = tagRepository.save(blogTag);
+                    tagId = blogTagDB.getId();
+                }
+                list.add(tagId);
+            }
+        }
+        return list;
     }
 }

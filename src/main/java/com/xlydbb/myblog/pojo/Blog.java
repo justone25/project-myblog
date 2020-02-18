@@ -19,9 +19,13 @@ public class Blog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
     private String content;
     private String firstPicture;
     private String flag;
+    @Transient
+    private String tagIds;
     private Integer views;
     //赞赏是否开启
     private boolean appreciation;
@@ -48,4 +52,25 @@ public class Blog {
     private User user;
     @OneToMany(mappedBy = "blog")
     private List<Comment> commentList = new ArrayList<>();
+    public void init(){
+        this.tagIds = tagsToIds(this.blogTags);
+    }
+    private String tagsToIds(List<BlogTag> tags){
+        if(!tags.isEmpty()){
+            StringBuffer ids = new StringBuffer();
+            boolean flag = false;
+            for (BlogTag tag:
+                 tags) {
+                if(flag){
+                    ids.append(",");
+                }else{
+                    flag = true;
+                }
+                ids.append(tag.getId());
+            }
+            return ids.toString();
+        }else{
+            return tagIds;
+        }
+    }
 }
