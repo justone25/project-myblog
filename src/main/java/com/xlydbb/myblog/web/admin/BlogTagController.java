@@ -61,7 +61,7 @@ public class BlogTagController {
     public String editPost(@Valid BlogTag blogTag, BindingResult bindingResult,
                        @PathVariable Long id, RedirectAttributes redirectAttributes){
         BlogTag blogTagDB = tagService.getTagByName(blogTag.getName());
-        if(blogTag != null){
+        if(blogTagDB != null){
             bindingResult.rejectValue("message","nameError","不能重复添加标签名称");
         }
         if(bindingResult.hasErrors()){

@@ -4,6 +4,7 @@ body {
     background: url("../images/index-bg.jpg") center center no-repeat fixed #464646;
     background-size: cover;
 }
+
 .m-padded-mini {
     padding: 0.2em !important;
 }

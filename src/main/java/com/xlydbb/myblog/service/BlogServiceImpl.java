@@ -4,13 +4,15 @@ import com.xlydbb.myblog.exception.NotFoundException;
 import com.xlydbb.myblog.pojo.Blog;
 import com.xlydbb.myblog.pojo.BlogType;
 import com.xlydbb.myblog.repository.BlogRepository;
+import com.xlydbb.myblog.util.MarkdownToHtmlUtils;
 import com.xlydbb.myblog.util.MyBeanUtils;
 import com.xlydbb.myblog.vo.BlogQuery;
-import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,20 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public Blog getBlog(Long id) {
         return blogRepository.getOne(id);
+    }
+
+    @Override
+    public Blog getAndConvent(Long id) {
+        Blog blog = blogRepository.getOne(id);
+        if(blog == null){
+            throw new NotFoundException("该博客不存在");
+        }
+        Blog b = new Blog();
+        BeanUtils.copyProperties(blog,b);
+        String content = b.getContent();
+        String c = MarkdownToHtmlUtils.markdownToHtmlExtensions(content);
+        b.setContent(c);
+        return b;
     }
 
     @Override
@@ -53,6 +69,24 @@ public class BlogServiceImpl implements BlogService {
             }
         },pageable);
     }
+
+    @Override
+    public Page<Blog> listBlog(Pageable pageable, String query) {
+        return blogRepository.findByTitleOrContentLikeAndPublishedIsTrue(query,pageable);
+    }
+
+    @Override
+    public Page<Blog> listPublishedBlog(Pageable pageable) {
+        return blogRepository.findBlogsByPublishedIsTrue(pageable);
+    }
+
+    @Override
+    public List<Blog> listRecommenBlogTop(Integer size) {
+        Sort sort = Sort.by(Sort.Direction.DESC,"updateTime");
+        Pageable pageable = PageRequest.of(0,size,sort);
+        return blogRepository.findByRecommendedIsTrue(pageable);
+    }
+
     @Transactional
     @Override
     public Blog saveBlog(Blog blog) {
@@ -70,6 +104,7 @@ public class BlogServiceImpl implements BlogService {
         }
         MyBeanUtils.copyPropertiesIgnoreNull(blog,blogDB);
         blogDB.setUpdateTime(new Date());
+
         return blogRepository.save(blogDB);
     }
     @Transactional

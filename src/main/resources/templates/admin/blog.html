@@ -81,6 +81,7 @@
                     <tr>
                         <th></th>
                         <th>标题</th>
+                        <th>简述</th>
                         <th>类型</th>
                         <th>推荐</th>
                         <th>发布状态</th>
@@ -92,6 +93,7 @@
                     <tr th:each="blog,iterStat : ${page.content}">
                         <td th:text="${iterStat.count}">1</td>
                         <td th:text="${blog.title}">刻意练习清单</td>
+                        <td th:text="${blog.description}">这是简述</td>
                         <td th:text="${blog.blogType.name}">认知升级</td>
                         <td th:text="${blog.recommended}?'是':'否'">是</td>
                         <td th:text="${blog.published}?'发布':'草稿'">草稿</td>
@@ -104,7 +106,7 @@
                     </tbody>
                     <tfoot>
                     <tr>
-                        <th colspan="7">
+                        <th colspan="8">
                             <div class="ui  pagination menu" th:if="${page.totalPages}>1">
                                 <!--<a class="icon item">-->
                                 <!--<i class="left chevron icon"></i>-->

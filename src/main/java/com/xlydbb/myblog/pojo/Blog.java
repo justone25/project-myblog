@@ -22,7 +22,9 @@ public class Blog {
     @Lob
     @Basic(fetch = FetchType.LAZY)
     private String content;
+    private String description;
     private String firstPicture;
+    //原创，转载，翻译
     private String flag;
     @Transient
     private String tagIds;

@@ -12,6 +12,7 @@ public interface TypeService {
     BlogType getTypeByName(String name);
     Page<BlogType> listType(Pageable pageable);
     List<BlogType> listType();
+    List<BlogType> listTopType(Integer size);
     BlogType updateType(Long id,BlogType type);
     BlogType deleteType(Long id);
 }

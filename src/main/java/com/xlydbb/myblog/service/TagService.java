@@ -14,6 +14,7 @@ public interface TagService {
     Page<BlogTag> listTag(Pageable pageable);
     List<BlogTag> listTag();
     List<BlogTag> listTag(String ids);
+    List<BlogTag> listTopTag(Integer size);
     BlogTag updateTag(Long id,BlogTag blogTag);
     //返回删除对象
     BlogTag deleteTag(Long id);

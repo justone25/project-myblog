@@ -42,29 +42,29 @@
             <div class="ui top attached segment">
                 <div class="ui mini horizontal link list">
                     <div class="item">
-                        <img src="https://unsplash.it/100/100?image=1005" alt="" class="ui avatar image">
-                        <div class="content"><a href="#" class="header">梁萧</a></div>
+                        <img src="https://unsplash.it/100/100?image=1005" alt="" th:src="${blog.user.avatar}" class="ui avatar image">
+                        <div class="content"><a href="#" class="header" th:text="${blog.user.nickname}">梁萧</a></div>
                     </div>
                     <div class="item">
-                        <i class="calendar icon"></i>2020-01-27
+                        <i class="calendar icon"></i><span th:text="${#dates.format(blog.updateTime,'yyyy-MM-dd')}">2020-01-27</span>
                     </div>
                     <div class="item">
-                        <i class="eye icon"></i>2342
+                        <i class="eye icon"></i><span th:text="${blog.views}">2342</span>
                     </div>
                 </div>
             </div>
 <!--            图片区域-->
             <div class="ui attached segment">
-                <img src="https://unsplash.it/800/450?image=1005" alt="" class="ui fluid rounded image">
+                <img src="https://unsplash.it/800/450?image=1005" th:src="@{${blog.firstPicture}}" alt="" class="ui fluid rounded image">
             </div>
 <!--            内容区域-->
             <div class="ui attached padded segment">
                 <div class="ui right aligned basic segment">
-                    <div class="ui orange basic label">原创</div>
+                    <div class="ui orange basic label" th:text="${blog.flag}">原创</div>
                 </div>
-                <h2 class="ui center aligned header">关于刻意练习的清单</h2>
+                <h2 class="ui center aligned header" th:text="${blog.title}">关于刻意练习的清单</h2>
                 <br>
-                <div id="content" class="m-padded-lr-responsive m-padded-tb-large typo typo-selection js-toc-content">
+                <div id="content" th:utext="${blog.content}" class="m-padded-lr-responsive m-padded-tb-large typo typo-selection js-toc-content">
                     <h1>11级目录</h1>
                     <h2>12级目录1</h2>
                     <h2>12级目录2</h2>
@@ -89,7 +89,7 @@
                 </div>
 <!--                标签-->
                 <div class="m-padded-lr-responsive">
-                    <div class="ui basic teal left pointing label">方法论</div>
+                    <div class="ui basic teal left pointing label" th:each="tag :${tags}" th:text="${tag.name}">方法论</div>
                 </div>
 <!--                赞赏-->
                 <div class="ui center aligned basic segment">
@@ -99,11 +99,11 @@
                     <div class="ui orange basic label">
                         <div class="ui images" style="font-size: inherit !important;">
                             <div class="image">
-                                <img src="../static/images/wechat.png" alt="" class="ui rounded bordered image" style="width: 120px">
+                                <img src="../static/images/wechat.png" th:src="@{/images/wechat.png}" alt="" class="ui rounded bordered image" style="width: 120px">
                                 <div>支付宝</div>
                             </div>
                             <div class="image">
-                                <img src="../static/images/wechat.png" alt="" class="ui rounded bordered image" style="width: 120px">
+                                <img src="../static/images/wechat.png" th:src="@{/images/wechat.png}" alt="" class="ui rounded bordered image" style="width: 120px">
                                 <div>微信</div>
                             </div>
                         </div>
@@ -116,14 +116,14 @@
                 <div class="ui middle aligned grid">
                     <div class="eleven wide column">
                         <ui class="list">
-                            <li>作者：小鲤鱼的爸爸</li>
-                            <li>发表时间：20120-02-13 16:36</li>
+                            <li>作者：<span th:text="${blog.user.nickname}">小鲤鱼的爸爸</span></li>
+                            <li>发表时间：<span th:text="${#dates.format(blog.updateTime,'yyyy-MM-dd HH:mm')}">20120-02-13 16:36</span></li>
                             <li>版权声明：自由转载-非商用-非衍生-保持署名(创意共享3.0许可证)</li>
                             <li>公众号转载：请在文末添加作者博客主页地址</li>
                         </ui>
                     </div>
                     <div class="five wide column">
-                        <img src="../static/images/wechat.png" alt="" class="ui right floated rounded bordered image" style="width: 110px">
+                        <img src="../static/images/wechat.png" th:src="@{/images/wechat.png}"alt="" class="ui right floated rounded bordered image" style="width: 110px">
                     </div>
                 </div>
             </div>
@@ -238,7 +238,7 @@
             <div id="toTop" class="ui icon button"><i class="chevron up icon"></i></div>
         </div>
     </div>
-    <div class="ui toc-content flowing popup transition hidden" style="width: 250px !important;">
+    <div class="ui toc-content flowing popup transition hidden" style="width: 220px !important;">
         <ol class="js-toc"></ol>
     </div>
     <div id="qrcode" class="ui wechat-qr flowing popup transition hidden" style="width: 130px !important;">
@@ -282,16 +282,19 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
 <script src="//cdn.jsdelivr.net/npm/jquery.scrollto@2.1.2/jquery.scrollTo.min.js"></script>
-<script src="../static/lib/prism/prism.js"></script>
-<script src="../static/lib/tocbot/tocbot.min.js"></script>
-<script src="../static/lib/qrCode/qrcode.min.js"></script>
-    <script src="../static/lib/waypoints/jquery.waypoints.min.js"></script>
+<script src="../static/lib/prism/prism.js" th:src="@{/lib/prism/prism.js}"></script>
+<script src="../static/lib/tocbot/tocbot.min.js" th:src="@{/lib/tocbot/tocbot.min.js}"></script>
+<script src="../static/lib/qrCode/qrcode.min.js" th:src="@{/lib/qrCode/qrcode.min.js}"></script>
+<script src="../static/lib/waypoints/jquery.waypoints.min.js" th:src="@{/lib/waypoints/jquery.waypoints.min.js}"></script>
 
-    <script>
+    <script th:inline="javascript">
     tocbot.init({
         tocSelector: '.js-toc',
         contentSelector: '.js-toc-content',
         headingSelector: 'h1,h2,h3',
+        scrollSmooth: true,
+        scrollSmoothOffset: -80,
+        headingsOffset: -500
     });
     $(".menu.toggle").click(function(){
         $('.m-item').toggleClass('m-mobile-hide');
@@ -302,17 +305,19 @@
         position : 'bottom center'
     })
     $(".toc.button").popup({
-        popup : $('.toc-content'),
+        popup : $('.toc-content.popup'),
         on : 'click',
-        position : 'left center'
+        position : 'top center'
     })
     $('.wechat').popup({
         popup:$('.wechat-qr'),
         on:'hover',
         position:'left center'
     });
+    var serverUrl = "http://localhost:8080";
+    var articleurl_to_qrcode = /*[[@{/blog/{id}(id=${blog.id})}]]*/"";
     var qrcode = new QRCode("qrcode",{
-        text: 'http://jindo.dev.naver.com/collie',
+        text: serverUrl+articleurl_to_qrcode,
         width: 110,
         height: 110,
         colorDark: '#000000',
