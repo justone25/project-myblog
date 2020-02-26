@@ -8,3 +8,5 @@ logging:
   level:
     root: info
     com.xlydbb.myblog: debug
+
+comment.avatar: /images/avatar.jpg
