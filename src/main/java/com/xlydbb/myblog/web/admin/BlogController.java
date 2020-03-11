@@ -34,14 +34,14 @@ public class BlogController {
     @Autowired
     TagService tagService;
     @GetMapping("/blogs")
-    public String list(@PageableDefault(size = 2,sort = {"updateTime"},direction = Sort.Direction.DESC) Pageable pageable,
+    public String list(@PageableDefault(size = 6,sort = {"updateTime"},direction = Sort.Direction.DESC) Pageable pageable,
                        BlogQuery blog, Model model){
         model.addAttribute("page",blogService.listBlog(pageable, blog));
         model.addAttribute("types",typeService.listType());
         return LIST;
     }
     @PostMapping("/blogs/search")
-    public String listSearch(@PageableDefault(size = 2,sort = {"updateTime"},direction = Sort.Direction.DESC) Pageable pageable,
+    public String listSearch(@PageableDefault(size = 6,sort = {"updateTime"},direction = Sort.Direction.DESC) Pageable pageable,
                              BlogQuery blog, Model model){
         model.addAttribute("page",blogService.listBlog(pageable, blog));
         return "admin/blog :: blogList";

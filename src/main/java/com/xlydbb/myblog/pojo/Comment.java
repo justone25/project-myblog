@@ -31,4 +31,5 @@ public class Comment {
     private List<Comment> replyComments = new ArrayList<>();
     @ManyToOne
     private Comment parentComment;
+    private boolean adminComment;
 }

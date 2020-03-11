@@ -92,26 +92,27 @@
                     <div class="ui basic teal left pointing label" th:each="tag :${tags}" th:text="${tag.name}">方法论</div>
                 </div>
 <!--                赞赏-->
-                <div class="ui center aligned basic segment">
-                    <button id="payButton" class="ui orange basic circular button">赞赏</button>
-                </div>
-                <div class="ui payQR flowing popup transition hidden">
-                    <div class="ui orange basic label">
-                        <div class="ui images" style="font-size: inherit !important;">
-                            <div class="image">
-                                <img src="../static/images/wechat.png" th:src="@{/images/wechat.png}" alt="" class="ui rounded bordered image" style="width: 120px">
-                                <div>支付宝</div>
-                            </div>
-                            <div class="image">
-                                <img src="../static/images/wechat.png" th:src="@{/images/wechat.png}" alt="" class="ui rounded bordered image" style="width: 120px">
-                                <div>微信</div>
+                <div th:if="${blog.appreciation}">
+                    <div class="ui center aligned basic segment">
+                        <button id="payButton" class="ui orange basic circular button">赞赏</button>
+                    </div>
+                    <div class="ui payQR flowing popup transition hidden">
+                        <div class="ui orange basic label">
+                            <div class="ui images" style="font-size: inherit !important;">
+                                <div class="image">
+                                    <img src="../static/images/wechat.png" th:src="@{/images/ali_pay.png}" alt="" class="ui rounded bordered image" style="width: 120px">
+                                    <div>支付宝</div>
+                                </div>
+                                <div class="image">
+                                    <img src="../static/images/wechat.png" th:src="@{/images/wechat_pay.png}" alt="" class="ui rounded bordered image" style="width: 120px">
+                                    <div>微信</div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
-            <div class="ui attached positive message">
+            <div class="ui attached positive message" th:if="${blog.shareStatement}">
 <!--                博客信息-->
                 <div class="ui middle aligned grid">
                     <div class="eleven wide column">
@@ -127,7 +128,7 @@
                     </div>
                 </div>
             </div>
-            <div class="ui bottom attached segment">
+            <div class="ui bottom attached segment" th:if="${blog.commentabled}">
 <!--                留言区域-->
                 <div id="comment-container" class="ui teal segment">
                     <div th:fragment="commentList">
@@ -140,7 +141,7 @@
                                 <div class="content">
                                     <a class="author">
                                         <span th:text="${comment.nickname}">Matt</span>
-                                        <div class="ui mini basic teal left pointing label m-padded-mini" th:if="">博主</div>
+                                        <div class="ui mini basic teal left pointing label m-padded-mini" th:if="${comment.adminComment}">博主</div>
                                     </a>
                                     <div class="metadata">
                                         <span class="date" th:text="${#dates.format(comment.createTime,'yyyy-MM-dd HH:mm:ss')}">Today at 5:42PM</span>
@@ -158,7 +159,9 @@
                                             <img src="https://unsplash.it/100/100?image=1006" th:src="@{${reply.avatar}}">
                                         </a>
                                         <div class="content">
-                                            <a class="author"><span th:text="${reply.nickname}">Matt</span>@<span th:text="${reply.parentComment.nickname}" class="m-teal">Lisa</span></a>
+                                            <a class="author"><span th:text="${reply.nickname}">Matt</span>
+                                                <div class="ui mini basic teal left pointing label m-padded-mini" th:if="${reply.adminComment}">博主</div>
+                                                @<span th:text="${reply.parentComment.nickname}" class="m-teal">Lisa</span></a>
                                             <div class="metadata">
                                                 <span class="date" th:text="${#dates.format(reply.createTime,'yyyy-MM-dd HH:mm:ss')}">Today at 5:42PM</span>
                                             </div>
@@ -185,13 +188,13 @@
                         <div class="field m-mobile-wide m-margin-bottom-small">
                             <div class="ui left icon input">
                                 <i class="user icon"></i>
-                                <input type="text" name="nickname" placeholder="姓名">
+                                <input type="text" name="nickname" placeholder="姓名" th:value="${session.user}!=null?${session.user.nickname}">
                             </div>
                         </div>
                         <div class="field m-mobile-wide m-margin-bottom-small">
                             <div class="ui left icon input">
                                 <i class="mail icon"></i>
-                                <input type="email" name="email" placeholder="邮箱">
+                                <input type="email" name="email" placeholder="邮箱" th:value="${session.user}!=null?${session.user.email}">
                             </div>
                         </div>
                         <div class="field m-mobile-wide m-margin-bottom-small">
@@ -251,6 +254,7 @@
             <p class="m-opacity-tiny">Copyright&copy;2020 - 2021 小鲤鱼的爸爸 Designed by 小鲤鱼的爸爸</p>
         </div>
     </footer>
+    <!--/*/<th:block th:replace="_fragments :: script">/*/-->"
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
 <script src="//cdn.jsdelivr.net/npm/jquery.scrollto@2.1.2/jquery.scrollTo.min.js"></script>
@@ -258,7 +262,7 @@
 <script src="../static/lib/tocbot/tocbot.min.js" th:src="@{/lib/tocbot/tocbot.min.js}"></script>
 <script src="../static/lib/qrCode/qrcode.min.js" th:src="@{/lib/qrCode/qrcode.min.js}"></script>
 <script src="../static/lib/waypoints/jquery.waypoints.min.js" th:src="@{/lib/waypoints/jquery.waypoints.min.js}"></script>
-
+    <!--/*/</th:block>/*/-->
 <script th:inline="javascript">
     $(function () {
         $("#comment-container").load(/*[[@{/comments/{id}(id=${blog.id})}]]*/"/comments/6");
@@ -289,7 +293,7 @@
         on:'hover',
         position:'left center'
     });
-    var serverUrl = "http://localhost:8080";
+    var serverUrl = "http://www.xlydbb.club";
     var articleurl_to_qrcode = /*[[@{/blog/{id}(id=${blog.id})}]]*/"";
     var qrcode = new QRCode("qrcode",{
         text: serverUrl+articleurl_to_qrcode,
@@ -364,8 +368,11 @@
     function clearContent(){
         $("[name='parentComment.id']").val(-1);
         $("[name='content']").val('');
-        $("[name='email']").val('');
-        $("[name='content']").attr("palceholder","请输入评论信息...");
+        if($("[name='email']").val()!='763247862@qq.com'){
+            $("[name='email']").val('');
+            $("[name='nickname']").val('');
+        }
+        $("[name='content']").attr("placeholder","请输入评论信息...");
     }
     function reply(obj){
         var commentId = $(obj).data("commentid");

@@ -19,11 +19,11 @@
     <div class="ui container">
         <div class="ui inverted secondary stackable menu">
             <h2 class="ui teal header item">Blog</h2>
-            <a href="#" class="m-item item m-mobile-hide" th:classappend="${n==1} ?  'active'"><i class="home icon"></i>首页</a>
-            <a href="#" class="m-item item m-mobile-hide" th:classappend="${n==2} ?  'active'"><i class="idea icon"></i>分类</a>
-            <a href="#" class="m-item item m-mobile-hide" th:classappend="${n==3} ?  'active'"><i class="tags icon"></i>标签</a>
-            <a href="#" class="m-item item m-mobile-hide" th:classappend="${n==4} ?  'active'"><i class="clone icon"></i>归档</a>
-            <a href="#" class="m-item item m-mobile-hide" th:classappend="${n==5} ?  'active'"><i class="info icon"></i>关于我</a>
+            <a href="#" th:href="@{/}" class="m-item item m-mobile-hide" th:classappend="${n==1} ?  'active'"><i class="home icon"></i>首页</a>
+            <a href="#" th:href="@{/types/-1}" class="m-item item m-mobile-hide" th:classappend="${n==2} ?  'active'"><i class="idea icon"></i>分类</a>
+            <a href="#" th:href="@{/tags/-1}" class="m-item item m-mobile-hide" th:classappend="${n==3} ?  'active'"><i class="tags icon"></i>标签</a>
+            <a href="#" th:href="@{/archives}" class="m-item item m-mobile-hide" th:classappend="${n==4} ?  'active'"><i class="clone icon"></i>归档</a>
+            <!--<a href="#" th:href="@{/about}" class="m-item item m-mobile-hide" th:classappend="${n==5} ?  'active'"><i class="info icon"></i>关于我</a>-->
             <!--搜索框-->
             <div class="m-item right item m-mobile-hide">
                 <form action="#" th:action="@{/search}" target="_blank" name="search" th:method="post">
@@ -52,11 +52,12 @@
             </div>
             <div class="three wide column">
                 <h4 class="ui inverted header">最新博客</h4>
-                <div class="ui inverted link list">
-                    <a href="#" class="item">用户故事(User Story)</a>
-                    <a href="#" class="item">用户故事(User Story)</a>
-                    <a href="#" class="item">用户故事(User Story)</a>
+                <div id="newBlog-container">
+                    <div class="ui inverted link list" th:fragment="newBlogList">
+                        <a href="#" th:href="@{/blog/{id}(id=${blog.id})}" target="_blank" class="item" th:each="blog : ${blogList}" th:text="${blog.title}">用户故事(User Story)</a>
+                    </div>
                 </div>
+
             </div>
             <div class="three wide column">
                 <h4 class="ui inverted header">联系我</h4>
@@ -74,5 +75,17 @@
         <p class="m-opacity-tiny">Copyright&copy;2020 - 2021 小鲤鱼的爸爸 Designed by 小鲤鱼的爸爸</p>
     </div>
 </footer>
+<th:block th:fragment="script">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/jquery.scrollto@2.1.2/jquery.scrollTo.min.js"></script>
+    <script src="../static/lib/prism/prism.js" th:src="@{/lib/prism/prism.js}"></script>
+    <script src="../static/lib/tocbot/tocbot.min.js" th:src="@{/lib/tocbot/tocbot.min.js}"></script>
+    <script src="../static/lib/qrCode/qrcode.min.js" th:src="@{/lib/qrCode/qrcode.min.js}"></script>
+    <script src="../static/lib/waypoints/jquery.waypoints.min.js" th:src="@{/lib/waypoints/jquery.waypoints.min.js}"></script>
+    <script>
+        $("#newBlog-container").load(/*[[@{/footer/newBlog}]]*/"/footer/newBlog");
+    </script>
+</th:block>
 </body>
 </html>

@@ -8,7 +8,4 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-server:
-  servlet:
-    session:
-      timeout: 0
+    open-in-view: true

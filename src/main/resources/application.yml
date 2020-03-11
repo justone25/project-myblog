@@ -3,10 +3,14 @@ spring:
   thymeleaf:
     mode: HTML
   profiles:
-    active: dev
+    active: prod
 logging:
   level:
     root: info
     com.xlydbb.myblog: debug
+server:
+  servlet:
+    session:
+      timeout: 0
 
 comment.avatar: /images/avatar.jpg
